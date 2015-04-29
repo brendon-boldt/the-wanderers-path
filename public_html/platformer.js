@@ -43,7 +43,7 @@
                     // W makes the character jump.
                     if (keysDown[K_UP]) {
 
-                        if (this.falling == false) {
+                        if (this.jumping == false) {
 //                            this.setImage("MaleUp.png");
                             this.jumping = true;
                             this.y -= 12;
@@ -53,6 +53,11 @@
                     } else {
                         checkFalling();
                     }// end if
+                    
+//                    These lines of code make the game too much fun
+//                    if (keysDown[K_UP] && this.jumping) {
+//                        this.changeMoveAngleBy(10)
+//                    }
                 } // end checkKeys
 
                 tCharacter.updateImage = function () {
@@ -69,7 +74,7 @@
                         else
                             this.setImage("images/MaleBase.png");
                     }
-//                    ghost.setImage(this.image.src);
+                    ghost.setImage(this.image.src);
 //                    ghost.image.style.opacity = "0.1";
 //                    console.log(ghost.image.style)
                 }
@@ -218,12 +223,14 @@
                     document.getElementById("deathScore").innerHTML = score;
                     menuScreen.style.display = "block";
                     menuText.style.display = "none";
+                    deathText.style.display = "block";
+                    returnToMenu.style.display = "block";
                 }
             }
 
             function waitForInput() {
                 if (keysDown[K_ESC]) {
-
+                    onMenu = true;
                 }
                 if (keysDown[K_DOWN]) {
                     reset();
@@ -252,6 +259,7 @@
                 menuScreen.style.display = "block";
                 menuText.style.display = "block";
                 deathText.style.display = "none";
+                returnToMenu.style.display = "none";
                 
                 
                 menuStart.style.color = "rgb(150,150,150)";
@@ -267,8 +275,12 @@
                         menuHowTo.style.color = "#fff";
                         menuHowTo.style.textShadow = "0 0 5px #fff";
                         break;
-                    default:
-                        
+                    default:       
+                }
+                // 13 is enter/return
+                if (keysDown[13] || keysDown[K_RIGHT] && menuSelected == 0) {
+                    onMenu = false;
+                    reset();
                 }
             }
 
@@ -338,11 +350,14 @@
                 background.changeImgAngleBy(score/2 *
                     Math.sin(timer.getElapsedTime() * 10 + 3.1415/4));
                 background.update();
+                fairLass.update();
+                updateBlocks();
                 
                 if (onMenu) {
                     menu();
                 } else {
                     if (character.alive) {
+                        ghost.setPosition(character.x - 3*character.dx,character.y - 3*character.dy);
                         character.checkKeys();
                         updateStats();
                         character.updateImage();
@@ -351,14 +366,13 @@
                         checkDie();
                         character.checkGravity();
                         ghost.setPosition(character.x - 3*character.dx,character.y - 3*character.dy);
-                        ghost.update();
+//                        ghost.update();
                     } else {
                         waitForInput();
                     }
                 }
 
-                fairLass.update();
-                updateBlocks();
+                
 
             } // end update
 
