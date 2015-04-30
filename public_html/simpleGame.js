@@ -465,6 +465,7 @@ function Scene(){
     
     //dynamically create a canvas element
     this.canvas = document.createElement("canvas");
+    this.canvas.id = "canvas";
     this.canvas.style.backgroundColor = "yellow";
     document.body.appendChild(this.canvas);
     this.context = this.canvas.getContext("2d");

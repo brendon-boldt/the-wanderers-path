@@ -278,7 +278,7 @@
                     default:       
                 }
                 // 13 is enter/return
-                if (keysDown[13] || keysDown[K_RIGHT] && menuSelected == 0) {
+                if ((keysDown[13] || keysDown[K_RIGHT]) && menuSelected == 0) {
                     onMenu = false;
                     reset();
                 }
@@ -349,6 +349,8 @@
                 scene.clear();
                 background.changeImgAngleBy(score/2 *
                     Math.sin(timer.getElapsedTime() * 10 + 3.1415/4));
+                //document.getElementById("canvas").style.webkitTransform = "rotateY("+score*10 * Math.sin(timer.getElapsedTime() * 10 + 3.1415/4)+"deg)";
+                //document.getElementById("canvas").style.webkitTransform = "rotateX("+score*10 * Math.cos(timer.getElapsedTime() * 10 + 3.1415/4)+"deg)";
                 background.update();
                 fairLass.update();
                 updateBlocks();
