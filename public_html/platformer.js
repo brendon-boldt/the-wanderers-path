@@ -6,7 +6,7 @@
                     blocks, background, bgHeight, bgWidth, bgArray, bgIndex,
                     timer, HitMarker, QuickScope, backgroundMusic, onMenu,
                     deathText, menuText, howToText, menuSelected, previousKeys,
-                    menuItems;
+                    menuItems, onAbout;
 
             function Character() {
                 tCharacter = new Sprite(scene, "images/MaleBase.png", 30, 50);
@@ -260,27 +260,63 @@
                 menuText.style.display = "block";
                 deathText.style.display = "none";
                 returnToMenu.style.display = "none";
+                aboutText.style.display = "none"
                 
                 
                 menuStart.style.color = "rgb(150,150,150)";
                 menuStart.style.textShadow = "";
-                menuHowTo.style.color = "rgb(150,150,150)";
-                menuHowTo.style.textShadow = "";
+                menuAbout.style.color = "rgb(150,150,150)";
+                menuAbout.style.textShadow = "";
                 switch (menuSelected) {
                     case 0:
                         menuStart.style.color = "#fff";
                         menuStart.style.textShadow = "0 0 5px #fff";
                         break;
                     case 1:
-                        menuHowTo.style.color = "#fff";
-                        menuHowTo.style.textShadow = "0 0 5px #fff";
+                        menuAbout.style.color = "#fff";
+                        menuAbout.style.textShadow = "0 0 5px #fff";
                         break;
                     default:       
                 }
                 // 13 is enter/return
-                if ((keysDown[13] || keysDown[K_RIGHT]) && menuSelected == 0) {
-                    onMenu = false;
-                    reset();
+                if ((keysDown[13] || keysDown[K_RIGHT])) {
+                    if (menuSelected == 0) {
+                        onMenu = false;
+                        reset();
+                    } else if (menuSelected == 1) {
+                        onMenu = false;
+                        onAbout = true;
+                    }
+                }
+            }
+
+            function about() {
+                menuScreen.style.display = "block";
+                menuText.style.display = "none";
+                deathText.style.display = "none";
+                returnToMenu.style.display = "block";
+                aboutText.style.display = "block"
+                
+                
+                menuStart.style.color = "rgb(150,150,150)";
+                menuStart.style.textShadow = "";
+                menuAbout.style.color = "rgb(150,150,150)";
+                menuAbout.style.textShadow = "";
+                switch (menuSelected) {
+                    case 0:
+                        menuStart.style.color = "#fff";
+                        menuStart.style.textShadow = "0 0 5px #fff";
+                        break;
+                    case 1:
+                        menuAbout.style.color = "#fff";
+                        menuAbout.style.textShadow = "0 0 5px #fff";
+                        break;
+                    default:       
+                }
+                // 13 is enter/return
+                if (keysDown[K_ESC]) {
+                    onMenu = true;
+                    onAbout = false;
                 }
             }
 
@@ -289,13 +325,15 @@
                 menuScreen = document.getElementById("menuScreen");
                 menuText = document.getElementById("menuText");
                 deathText = document.getElementById("deathText");
+                aboutText = document.getElementById("aboutText");
                 menuStart = document.getElementById("menuStart");
-                menuHowTo = document.getElementById("menuHowTo");
+                menuAbout = document.getElementById("menuAbout");
                 document.addEventListener("keydown", menuSelector, false);
                 
 
                 previousKeys = keysDown;
                 onMenu = true;
+                onAbout = false;
                 menuItems = 2;
                 menuSelected = 0;
                 score = 0;
@@ -357,6 +395,8 @@
                 
                 if (onMenu) {
                     menu();
+                } else if (onAbout) {
+                    about();
                 } else {
                     if (character.alive) {
                         ghost.setPosition(character.x - 3*character.dx,character.y - 3*character.dy);
